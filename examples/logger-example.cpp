@@ -8,6 +8,10 @@ int main()
 {
 	logger log;
 
+	//defaults values are true
+	log.consoleLoggingEnabled = true;
+	log.fileLoggingEnabled = true;
+
 	log.info("Starting security analysis");
 	log.success("Process analysis module loaded");
 	log.warning("Potential VM environment detected");
