@@ -9,5 +9,6 @@
 #include <iostream>
 #include <fstream>
 #include <unordered_map>
+#include <vector>
 
 #endif //COMMON_H
