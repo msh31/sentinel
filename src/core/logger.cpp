@@ -46,12 +46,12 @@ void logger::fatal(const std::string& message)
 std::string logger::getColorForLevel(const std::string& level)
 {
 	static const std::unordered_map<std::string, std::string> levelColors = {
-		{"INFO", INFO},
-		{"WARN", WARNING},
-		{"ERR", ERROR},
-		{"DBG", SUCCESS},
-		{"SUC", SUCCESS},
-		{"FATAL", FATAL}
+		{"INFO", SENTINEL_INFO},
+		{"WARN", SENTINEL_WARNING},
+		{"ERR", SENTINEL_ERROR},
+		{"DBG", SENTINEL_SUCCESS},
+		{"SUC", SENTINEL_SUCCESS},
+		{"FATAL", SENTINEL_FATAL}
 	};
 
 	auto colorEntry  = levelColors.find(level);
@@ -59,7 +59,7 @@ std::string logger::getColorForLevel(const std::string& level)
 		return colorEntry ->second; //value from the key-value pair :D
 	}
 
-	return RESET;
+	return SENTINEL_RESET;
 }
 
 void logger::log(const std::string& level, const std::string& message)
@@ -67,12 +67,18 @@ void logger::log(const std::string& level, const std::string& message)
 	std::string colorCode = getColorForLevel(level);
 
 	if (consoleLoggingEnabled) {
-		std::cout << colorCode << "[" << level << "]" << RESET << " " << message << "\n";
+		std::cout << colorCode << "[" << level << "]" << SENTINEL_RESET << " " << message << "\n";
 	}
 
 	if (fileLoggingEnabled) {
 		if (!logFile.is_open()) { // this is called a lazy init apparently
 			logFile.open(logFilePath, std::ios::app);
+
+			if (!logFile.is_open()) {
+				std::cerr << "Error: Could not open log file at " << logFilePath << ". Disabling file logging.\n";
+				fileLoggingEnabled = false;
+				return;
+			}
 		}
 
 		logFile << "[" << level << "] " << message << "\n";

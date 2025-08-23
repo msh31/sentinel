@@ -8,12 +8,12 @@
 #include <string>
 #include <fstream>
 
-#define RESET     "\033[0m"
-#define ERROR     "\033[31m"
-#define WARNING   "\033[33m"
-#define INFO      "\033[36m"
-#define SUCCESS   "\033[32m" // (or DEBUG)
-#define FATAL     "\033[35m"
+#define SENTINEL_RESET     "\033[0m"
+#define SENTINEL_ERROR     "\033[31m"
+#define SENTINEL_WARNING   "\033[33m"
+#define SENTINEL_INFO      "\033[36m"
+#define SENTINEL_SUCCESS   "\033[32m" // (or DEBUG)
+#define SENTINEL_FATAL     "\033[35m"
 
 class logger
 {
