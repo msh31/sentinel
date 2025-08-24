@@ -85,16 +85,16 @@ std::string vm_detection::getComputerName() {
 }
 
 std::string vm_detection::getSystemProductName() {
-    return registryHelper.getRegistryValue(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\BIOS", "SystemProductName");
+    return registry_helper::getRegistryValue(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\BIOS", "SystemProductName");
 }
 
 std::string vm_detection::getBIOSManufacturer() {
-    return registryHelper.getRegistryValue(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\BIOS", "SystemManufacturer");
+    return registry_helper::getRegistryValue(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\BIOS", "SystemManufacturer");
 }
 std::string vm_detection::getBIOSVersion() {
-    return registryHelper.getRegistryValue(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\BIOS", "BIOSVersion");
+    return registry_helper::getRegistryValue(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\BIOS", "BIOSVersion");
 }
 
 std::string vm_detection::getVideoBiosVersion() {
-    return registryHelper.getRegistryValue(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\BIOS", "VideoBiosVersion");
+    return registry_helper::getRegistryValue(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\BIOS", "VideoBiosVersion");
 }

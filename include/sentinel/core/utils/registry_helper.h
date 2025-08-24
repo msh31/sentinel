@@ -11,7 +11,7 @@
 class registry_helper
 {
 	public:
-		std::string getRegistryValue(HKEY hKey, const std::string& subKey, const std::string& valueName);
+		static std::string getRegistryValue(HKEY hKey, const std::string& subKey, const std::string& valueName);
 };
 
 #endif //REGISTRY_HELPER_H
