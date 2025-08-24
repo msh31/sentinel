@@ -12,6 +12,7 @@ class registry_helper
 {
 	public:
 		static std::string getRegistryValue(HKEY hKey, const std::string& subKey, const std::string& valueName);
+		static bool setRegistryValue(HKEY hKey, const std::string& subKey, const std::string& valueName, const std::string& valueData);
 };
 
 #endif //REGISTRY_HELPER_H
