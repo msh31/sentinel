@@ -35,8 +35,19 @@ std::string system_helper::getVideoBiosVersion() {
 
 std::string system_helper::getArchitectureString(const SYSTEM_INFO& sysInfo){
 	// for reference, it's labeled as AMD64 simply because AMD got there first, Intel CPU's these days use it too, before that it was x86
-	// TODO: Improve return value by checking for more architecture types, like X86 & Arm(64)
-	return std::string(sysInfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64 ? "x64" : "x86");
+
+	switch (sysInfo.wProcessorArchitecture) { //this is a WORD value which is an 16-bit unsigned integer meaniing it can be used in a switch statement, apparently thats a thiing
+		case PROCESSOR_ARCHITECTURE_AMD64:
+			return std::string("x64");
+		case PROCESSOR_ARCHITECTURE_ARM:
+			return std::string("ARM");
+		case PROCESSOR_ARCHITECTURE_ARM64:
+			return std::string("ARM64");
+		case PROCESSOR_ARCHITECTURE_INTEL:
+			return std::string("x86");
+	}
+
+	return "Unknown";
 }
 
 std::vector<std::string> system_helper::filterFilesByType(const std::vector<std::string>& files, const std::vector<std::string>& extensions)
