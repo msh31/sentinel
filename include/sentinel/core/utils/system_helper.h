@@ -18,6 +18,8 @@ class system_helper
 		static std::string getSystemProductName();
 		static std::string getVideoBiosVersion();
 		static std::string getArchitectureString(const SYSTEM_INFO& sysInfo);
+
+		std::vector<std::string> filterFilesByType(const std::vector<std::string>& files, const std::vector<std::string>& extensions);
 };
 
 #endif //SYSTEM_UTILS_H

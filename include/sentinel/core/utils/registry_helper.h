@@ -6,7 +6,6 @@
 #define REGISTRY_HELPER_H
 
 #include <sentinel/common.h>
-#include <windows.h>
 
 class registry_helper
 {
