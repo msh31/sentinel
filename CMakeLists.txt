@@ -4,7 +4,7 @@ project(sentinel VERSION 1.0.0)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# build / module opptions
+# build / module options
 option(BUILD_EXAMPLES "Build example programs" ON)
 
 option(BUILD_VM_DETECTION "Build VM detection module" ON)
@@ -17,6 +17,7 @@ option(BUILD_NETWORK_BEACON "Build network beacon module" ON)
 add_library(sentinel STATIC
         src/core/logger.cpp
         src/core/utils/registry_helper.cpp
+        src/core/utils/system_utils.cpp
 )
 
 # headers
@@ -27,8 +28,17 @@ target_include_directories(sentinel PUBLIC
 # build conditions
 if(BUILD_EXAMPLES)
     message(STATUS "Building examples")
-    add_executable(logger_example examples/logger-example.cpp)
-    target_link_libraries(logger_example sentinel)
+
+    set(EXAMPLES
+            logger-example
+            vm_detection_example
+    )
+
+    foreach(EXAMPLE ${EXAMPLES})
+        add_executable(${EXAMPLE} examples/${EXAMPLE}.cpp)
+        target_link_libraries(${EXAMPLE} sentinel)
+        message(STATUS "  Building example: ${EXAMPLE}")
+    endforeach()
 endif()
 
 if(BUILD_VM_DETECTION)

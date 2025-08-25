@@ -2,14 +2,17 @@
 // Created by Marco on 23/08/2025.
 //
 
+#include <sentinel/core/utils/system_utils.h>
 #include <sentinel/modules/vm_detection.h>
 
+//TODO: Improve accuracy by finding more details such as Disks, Networks etc..
+
 bool vm_detection::isVirtualMachine() {
-    checkForVMSignatures(getComputerName(), "Computer Name");
-    checkForVMSignatures(getBIOSManufacturer(), "BIOS Manufacturer");
-    checkForVMSignatures(getBIOSVersion(), "BIOS Version");
-    checkForVMSignatures(getSystemProductName(), "System Product Name");
-    checkForVMSignatures(getVideoBiosVersion(), "Video BIOS Version");
+    checkForVMSignatures(system_utils::getComputerName(), "Computer Name");
+    checkForVMSignatures(system_utils::getBIOSManufacturer(), "BIOS Manufacturer");
+    checkForVMSignatures(system_utils::getBIOSVersion(), "BIOS Version");
+    checkForVMSignatures(system_utils::getSystemProductName(), "System Product Name");
+    checkForVMSignatures(system_utils::getVideoBiosVersion(), "Video BIOS Version");
 
     return !detectedSignatures.empty();
 }
@@ -17,7 +20,7 @@ bool vm_detection::isVirtualMachine() {
 void vm_detection::generateReport() {
     std::string hypervisor = vm_detection::hypervisor;
 
-    log.info("Confidence of being a VM: " + confidence);
+    log.info("Confidence: " + confidence);
     log.info("\nDetected Signatures: \n");
 
     for(const auto &sigs : detectedSignatures) {
@@ -71,30 +74,4 @@ std::string vm_detection::checkForVMSignatures(const std::string& value, const s
     }
 
     return "None";
-}
-
-std::string vm_detection::getComputerName() {
-    char computerName[MAX_COMPUTERNAME_LENGTH + 1];
-    DWORD size = sizeof(computerName);
-
-    if (GetComputerNameA(computerName, &size)) {
-        return std::string(computerName);
-    }
-
-    return "Unknown";
-}
-
-std::string vm_detection::getSystemProductName() {
-    return registry_helper::getRegistryValue(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\BIOS", "SystemProductName");
-}
-
-std::string vm_detection::getBIOSManufacturer() {
-    return registry_helper::getRegistryValue(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\BIOS", "SystemManufacturer");
-}
-std::string vm_detection::getBIOSVersion() {
-    return registry_helper::getRegistryValue(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\BIOS", "BIOSVersion");
-}
-
-std::string vm_detection::getVideoBiosVersion() {
-    return registry_helper::getRegistryValue(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\BIOS", "VideoBiosVersion");
 }

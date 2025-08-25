@@ -16,12 +16,6 @@ class vm_detection
 		void generateReport();
 
 	private:
-		static std::string getComputerName();
-		static std::string getBIOSManufacturer();
-		static std::string getBIOSVersion();
-		static std::string getSystemProductName();
-		static std::string getVideoBiosVersion();
-
 		std::string checkForVMSignatures(const std::string& value, const std::string& source);
 
 		std::string confidence = "LOW";
