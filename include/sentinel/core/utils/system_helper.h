@@ -7,6 +7,8 @@
 
 #include <sentinel/common.h>
 
+#include "registry_helper.h"
+
 class system_helper
 {
 	public:
@@ -15,6 +17,7 @@ class system_helper
 		static std::string getBIOSVersion();
 		static std::string getSystemProductName();
 		static std::string getVideoBiosVersion();
+		static std::string getArchitectureString(const SYSTEM_INFO& sysInfo);
 };
 
 #endif //SYSTEM_UTILS_H

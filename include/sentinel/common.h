@@ -10,5 +10,6 @@
 #include <fstream>
 #include <unordered_map>
 #include <vector>
+#include <windows.h>
 
 #endif //COMMON_H
