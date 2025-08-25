@@ -2,7 +2,7 @@
 // Created by Marco on 23/08/2025.
 //
 
-#include <sentinel/core/logger.h>
+#include <sentinel/core/sentinel.h>
 
 int main()
 {

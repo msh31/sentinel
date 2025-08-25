@@ -20,6 +20,8 @@ class system_helper
 		static std::string getArchitectureString(const SYSTEM_INFO& sysInfo);
 
 		std::vector<std::string> filterFilesByType(const std::vector<std::string>& files, const std::vector<std::string>& extensions);
+
+		//TODO: add service persistence support,falsl udnder system
 };
 
 #endif //SYSTEM_UTILS_H

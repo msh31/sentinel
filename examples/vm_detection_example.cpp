@@ -2,7 +2,6 @@
 // Created by Marco on 24/08/2025.
 //
 
-#include <sentinel/core/logger.h>
 #include <sentinel/modules/vm_detection.h>
 
 int main()
