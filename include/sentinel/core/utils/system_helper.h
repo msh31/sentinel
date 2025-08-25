@@ -7,7 +7,7 @@
 
 #include <sentinel/common.h>
 
-class system_utils
+class system_helper
 {
 	public:
 		static std::string getComputerName();

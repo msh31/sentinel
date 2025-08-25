@@ -17,7 +17,8 @@ option(BUILD_NETWORK_BEACON "Build network beacon module" ON)
 add_library(sentinel STATIC
         src/core/logger.cpp
         src/core/utils/registry_helper.cpp
-        src/core/utils/system_utils.cpp
+        src/core/utils/system_helper.cpp
+        src/core/utils/process_helper.cpp
 )
 
 # headers

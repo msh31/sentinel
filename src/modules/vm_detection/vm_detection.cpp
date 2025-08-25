@@ -2,17 +2,17 @@
 // Created by Marco on 23/08/2025.
 //
 
-#include <sentinel/core/utils/system_utils.h>
+#include <sentinel/core/utils/system_helper.h>
 #include <sentinel/modules/vm_detection.h>
 
 //TODO: Improve accuracy by finding more details such as Disks, Networks etc..
 
 bool vm_detection::isVirtualMachine() {
-    checkForVMSignatures(system_utils::getComputerName(), "Computer Name");
-    checkForVMSignatures(system_utils::getBIOSManufacturer(), "BIOS Manufacturer");
-    checkForVMSignatures(system_utils::getBIOSVersion(), "BIOS Version");
-    checkForVMSignatures(system_utils::getSystemProductName(), "System Product Name");
-    checkForVMSignatures(system_utils::getVideoBiosVersion(), "Video BIOS Version");
+    checkForVMSignatures(system_helper::getComputerName(), "Computer Name");
+    checkForVMSignatures(system_helper::getBIOSManufacturer(), "BIOS Manufacturer");
+    checkForVMSignatures(system_helper::getBIOSVersion(), "BIOS Version");
+    checkForVMSignatures(system_helper::getSystemProductName(), "System Product Name");
+    checkForVMSignatures(system_helper::getVideoBiosVersion(), "Video BIOS Version");
 
     return !detectedSignatures.empty();
 }
