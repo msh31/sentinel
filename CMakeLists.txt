@@ -19,6 +19,7 @@ add_library(sentinel STATIC
         src/core/utils/registry_helper.cpp
         src/core/utils/system_helper.cpp
         src/core/utils/process_helper.cpp
+        # src/modules/persistence/persistence.cpp
 )
 
 # headers
@@ -33,6 +34,7 @@ if(BUILD_EXAMPLES)
     set(EXAMPLES
             logger-example
             vm_detection_example
+#            persistence-example
     )
 
     foreach(EXAMPLE ${EXAMPLES})

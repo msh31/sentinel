@@ -20,5 +20,6 @@ cmake_install.cmake
 Makefile
 build/
 
-# Other temp files
+# Other (temp) files
 *.log
+ignoreMe.md
