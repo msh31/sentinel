@@ -19,7 +19,8 @@ add_library(sentinel STATIC
         src/core/utils/registry_helper.cpp
         src/core/utils/system_helper.cpp
         src/core/utils/process_helper.cpp
-        # src/modules/persistence/persistence.cpp
+        src/core/utils/service_helper.cpp
+         src/modules/persistence/persistence.cpp
 )
 
 # headers
