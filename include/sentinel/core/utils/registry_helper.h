@@ -6,6 +6,7 @@
 #define REGISTRY_HELPER_H
 
 #include <sentinel/common.h>
+#include <sentinel/core/utils/raii_wrapper.h>
 
 class registry_helper
 {

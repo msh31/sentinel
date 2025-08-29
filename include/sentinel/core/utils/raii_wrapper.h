@@ -15,7 +15,7 @@
  *  At the time when I wrote the code for 'process-memory-tools' I implemented a RAII wrapper, but only for processes,
  *  with templates, it can support any type!!!! it's ideal for this project, I think even if it's a bit complex at first.
 */
-template<typename T, void(*CleanupFunc)(T)>
+template<typename T, auto CleanupFunc>
 class raii_wrapper
 {
 	public:
@@ -25,8 +25,7 @@ class raii_wrapper
 			CleanupFunc(handle);
 		}
 
-		// conversion operator, let it be used like a normal HANDLE!
-		operator HANDLE() const {
+		operator T() const {
 			return handle;
 		}
 
