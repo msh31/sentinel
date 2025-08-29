@@ -20,7 +20,6 @@ add_library(sentinel STATIC
         src/core/utils/system_helper.cpp
         src/core/utils/process_helper.cpp
         src/core/utils/service_helper.cpp
-         src/modules/persistence/persistence.cpp
 )
 
 # headers
@@ -60,10 +59,10 @@ endif()
 #    target_compile_definitions(sentinel PRIVATE SENTINEL_HAS_PROCESS_ANALYSIS)
 #endif()
 #
-#if(BUILD_PERSISTENCE)
-#    target_sources(sentinel PRIVATE src/modules/persistence/persistence.cpp)
-#    target_compile_definitions(sentinel PRIVATE SENTINEL_HAS_PERSISTENCE)
-#endif()
+if(BUILD_PERSISTENCE)
+    target_sources(sentinel PRIVATE src/modules/persistence/persistence.cpp)
+    target_compile_definitions(sentinel PRIVATE SENTINEL_HAS_PERSISTENCE)
+endif()
 #
 #if(BUILD_NETWORK_BEACON)
 #    target_sources(sentinel PRIVATE src/modules/network_beacon/network_beacon.cpp)
