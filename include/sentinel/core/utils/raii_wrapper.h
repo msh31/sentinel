@@ -25,8 +25,14 @@ class raii_wrapper
 			CleanupFunc(handle);
 		}
 
-		operator T() const {
+		operator T() const { //allows the wrapper be used like a normal handle
 			return handle;
+		}
+
+		// allows checking if the wrapper holds a valid resource in boolean contexts
+		// returns true if the handle is valid (not null or invalid), otherwise false
+		explicit operator bool() const {
+			return handle != nullptr && handle != INVALID_HANDLE_VALUE;
 		}
 
 		// disable copying (prevent accidental double-cleanup)
