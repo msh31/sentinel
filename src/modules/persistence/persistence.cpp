@@ -21,6 +21,7 @@ PersistenceResult persistence::install() {
 
 	if (asService) {
 		result.serviceSuccess = serviceHelper.createService(serviceName, serviceDisplayName, serviceExecutablePath);
+		result.serviceSuccess += serviceHelper.startService(serviceName);
 
 		if (result.serviceSuccess) {
 			result.details += "Service: OK ";
@@ -35,6 +36,12 @@ PersistenceResult persistence::install() {
 PersistenceResult persistence::uninstall()
 {
 	PersistenceResult result;
+
+	if (launchAtStartup){
+
+	}
+
+
 	return result; //placeholder
 }
 
