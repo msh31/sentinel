@@ -23,6 +23,7 @@ std::string registry_helper::getRegistryValue(HKEY hKey, const std::string& subK
 	return "Unknown";
 }
 
+// also creates the key if it does not exist
 bool registry_helper::setRegistryValue(HKEY hKey, const std::string& subKey, const std::string& valueName, const std::string& valueData)
 {
 	HKEY rawKey;
@@ -38,4 +39,10 @@ bool registry_helper::setRegistryValue(HKEY hKey, const std::string& subKey, con
 	}
 
 	return success;
+}
+
+// subkeys will not work
+bool registry_helper::removeRegistryKeyAndValue(HKEY hKey, const std::string& subKey)
+{
+	return RegDeleteKeyA(hKey, subKey.c_str()) == ERROR_SUCCESS;
 }
