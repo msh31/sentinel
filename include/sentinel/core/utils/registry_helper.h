@@ -20,7 +20,7 @@ class registry_helper
 		logger log;
 
 		static raii_wrapper<HKEY, RegCloseKey> openRegistryKey(HKEY root, const std::string& subKey);
-		static raii_wrapper<HKEY, RegCloseKey> createOrOpenRegistryKey(HKEY root, const std::string& subKey)
+		static raii_wrapper<HKEY, RegCloseKey> createOrOpenRegistryKey(HKEY root, const std::string& subKey);
 };
 
 #endif //REGISTRY_HELPER_H
