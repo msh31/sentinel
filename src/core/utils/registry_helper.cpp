@@ -70,3 +70,16 @@ bool registry_helper::removeRegistryKeyAndValue(HKEY hKey, const std::string& su
 {
 	return RegDeleteKeyA(hKey, subKey.c_str()) == ERROR_SUCCESS;
 }
+
+bool registry_helper::removeRegistryValue(HKEY hKey, const std::string& subKey, const std::string& valueName)
+{
+	HKEY rawKey = nullptr;
+
+	if (RegOpenKeyExA(hKey, subKey.c_str(), 0, KEY_WRITE, &rawKey) != ERROR_SUCCESS) {
+		logger().error("[Registry] Failed to open key for value deletion: " + subKey);
+		return false;
+	}
+
+	raii_wrapper<HKEY, RegCloseKey> key(rawKey);
+	return RegDeleteValueA(key, valueName.c_str()) == ERROR_SUCCESS;
+}

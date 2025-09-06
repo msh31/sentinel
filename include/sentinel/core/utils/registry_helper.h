@@ -15,6 +15,7 @@ class registry_helper
 		static std::string getRegistryValue(HKEY hKey, const std::string& subKey, const std::string& valueName);
 		static bool setRegistryValue(HKEY hKey, const std::string& subKey, const std::string& valueName, const std::string& valueData);
 		static bool removeRegistryKeyAndValue(HKEY hKey, const std::string& subKey);
+		static bool removeRegistryValue(HKEY hKey, const std::string& subKey, const std::string& valueName);
 
 	private:
 		logger log;
