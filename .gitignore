@@ -1,5 +1,7 @@
 # CLion project settings
-.idea/
+.idea/workspace.xml
+.idea/usage.statistics.xml
+.idea/shelf/
 
 # CMake build directories
 cmake-build*/
