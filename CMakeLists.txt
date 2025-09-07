@@ -35,6 +35,7 @@ if(BUILD_EXAMPLES)
             logger-example
             vm_detection_example
             persistence-example
+            anti_debug-example
     )
 
     foreach(EXAMPLE ${EXAMPLES})
@@ -49,13 +50,13 @@ if(BUILD_VM_DETECTION)
     target_compile_definitions(sentinel PRIVATE SENTINEL_HAS_VM_DETECTION)
 endif()
 
-#if(BUILD_ANTI_DEBUG)
-#    target_sources(sentinel PRIVATE src/modules/anti_debug/anti_debug.cpp)
-#    target_compile_definitions(sentinel PRIVATE SENTINEL_HAS_ANTI_DEBUG)
-#endif()
+if(BUILD_ANTI_DEBUG)
+    target_sources(sentinel PRIVATE src/modules/anti_debug.cpp)
+    target_compile_definitions(sentinel PRIVATE SENTINEL_HAS_ANTI_DEBUG)
+endif()
 #
 #if(BUILD_PROCESS_ANALYSIS)
-#    target_sources(sentinel PRIVATE src/modules/process_analysis/process_analysis.cpp)
+#    target_sources(sentinel PRIVATE src/modules/process_analysis.cpp)
 #    target_compile_definitions(sentinel PRIVATE SENTINEL_HAS_PROCESS_ANALYSIS)
 #endif()
 #
@@ -65,6 +66,6 @@ if(BUILD_PERSISTENCE)
 endif()
 #
 #if(BUILD_NETWORK_BEACON)
-#    target_sources(sentinel PRIVATE src/modules/network_beacon/network_beacon.cpp)
+#    target_sources(sentinel PRIVATE src/modules/network_beacon.cpp)
 #    target_compile_definitions(sentinel PRIVATE SENTINEL_HAS_NETWORK_BEACON)
 #endif()
