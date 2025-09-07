@@ -80,5 +80,34 @@ PersistenceResult persistence::uninstall()
 PersistenceResult persistence::verify()
 {
 	PersistenceResult result;
-	return result; //placeholder
+
+	if (launchAtStartup) {
+		HKEY targetHive = systemLevel ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER;
+		std::string regValue = registry_helper::getRegistryValue(targetHive, "Software\\Microsoft\\Windows\\CurrentVersion\\Run", startupFile);
+
+		if (regValue == "Unknown") {
+			DWORD error = GetLastError();
+			result.registrySuccess = false;
+			result.details += "REG VERIFY FAIL ( ";
+			result.details += std::to_string(error) + " )";
+		} else {
+			result.registrySuccess = true;
+			result.details += "REG VERIFY PASS";
+		}
+	}
+
+	if (asService) {
+		if (!serviceHelper.validateService(serviceName)) {
+			DWORD error = GetLastError();
+
+			result.serviceSuccess = false;
+			result.details += "SRV VERIFY FAIL (";
+			result.details += std::to_string(error) + " )";
+		} else {
+			result.serviceSuccess = true;
+			result.details += "SRV VERIFY PASS";
+		}
+	}
+
+	return result;
 }
