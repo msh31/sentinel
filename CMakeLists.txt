@@ -45,7 +45,7 @@ if(BUILD_EXAMPLES)
 endif()
 
 if(BUILD_VM_DETECTION)
-    target_sources(sentinel PRIVATE src/modules/vm_detection/vm_detection.cpp)
+    target_sources(sentinel PRIVATE src/modules/vm_detection.cpp)
     target_compile_definitions(sentinel PRIVATE SENTINEL_HAS_VM_DETECTION)
 endif()
 
@@ -60,7 +60,7 @@ endif()
 #endif()
 #
 if(BUILD_PERSISTENCE)
-    target_sources(sentinel PRIVATE src/modules/persistence/persistence.cpp)
+    target_sources(sentinel PRIVATE src/modules/persistence.cpp)
     target_compile_definitions(sentinel PRIVATE SENTINEL_HAS_PERSISTENCE)
 endif()
 #
