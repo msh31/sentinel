@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # build / module options
-option(BUILD_EXAMPLES "Build examples" ON)
+option(BUILD_EXAMPLES "Build examples" OFF)
 
 option(BUILD_VM_DETECTION "Build VM detection module" ON)
 option(BUILD_ANTI_DEBUG "Build anti-debug module" ON)
