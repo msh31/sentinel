@@ -8,6 +8,7 @@
 #include <sentinel/core/utils/service_helper.h>
 #include <sentinel/common.h>
 #include <sentinel/core/logger.h>
+#include <sentinel/core/utils/registry_helper.h>
 
 struct PersistenceResult {
 	bool registrySuccess = false;
