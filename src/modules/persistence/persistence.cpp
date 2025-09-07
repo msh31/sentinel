@@ -12,9 +12,10 @@ PersistenceResult persistence::install() {
 		result.registrySuccess = registry_helper::setRegistryValue(targetHive, "Software\\Microsoft\\Windows\\CurrentVersion\\Run", startupFile, startupFilePath);
 
 		if (result.registrySuccess) {
-			result.details += "Registry: OK ";
+			result.details += "REG INSTALL OK ";
 		} else {
-			result.details += "Registry: ERR ";
+			DWORD error = GetLastError();
+			result.details += "REG INSTALL ERR (" + std::to_string(error) + ")";
 		}
 
 	}
@@ -24,9 +25,10 @@ PersistenceResult persistence::install() {
 		result.serviceSuccess += serviceHelper.startService(serviceName);
 
 		if (result.serviceSuccess) {
-			result.details += "Service: OK ";
+			result.details += "SRV INSTALL OK ";
 		} else {
-			result.details += "Service: ERR ";
+			DWORD error = GetLastError();
+			result.details += "SRV INSTALL ERR (" + std::to_string(error) + ")";
 		}
 	}
 
@@ -38,11 +40,41 @@ PersistenceResult persistence::uninstall()
 	PersistenceResult result;
 
 	if (launchAtStartup){
+		HKEY targetHive = systemLevel ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER;
+		result.registrySuccess = registry_helper::removeRegistryValue(targetHive, "Software\\Microsoft\\Windows\\CurrentVersion\\Run", startupFile);
 
+		if (result.registrySuccess) {
+			result.details += "REG DELETE OK ";
+		} else {
+			DWORD error = GetLastError();
+			result.details += "REG DELETE ERR (" + std::to_string(error) + ")";
+
+			if (error == ERROR_FILE_NOT_FOUND) {
+				log.warning("Registry value '" + startupFile + "' was not found");
+			} else if (error == ERROR_ACCESS_DENIED) {
+				log.error("Access denied - need administrator privileges");
+			}
+		}
 	}
 
+	if (asService) {
+		log.info("Attempting to stop and delete service: " + serviceName);
 
-	return result; //placeholder
+		bool stopSuccess = serviceHelper.stopService(serviceName);
+		bool deleteSuccess = serviceHelper.deleteService(serviceName);
+
+		result.serviceSuccess = stopSuccess && deleteSuccess;
+
+		if (result.serviceSuccess) {
+			result.details += "SRV DELETE OK";
+		} else {
+			result.details += "SRV DELETE ERR, REASON:  ";
+			if (!stopSuccess) log.error("Failed to stop service");
+			if (!deleteSuccess) log.error("Failed to delete service");
+		}
+	}
+
+	return result;
 }
 
 PersistenceResult persistence::verify()

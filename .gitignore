@@ -23,4 +23,3 @@ build/
 # Other (temp) files
 *.log
 ignoreMe.md
-examples/persistence-example.cpp

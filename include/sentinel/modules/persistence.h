@@ -6,7 +6,6 @@
 #define PERSISTENCE_H
 
 #include <sentinel/core/utils/service_helper.h>
-#include <sentinel/core/utils/registry_helper.h>
 #include <sentinel/common.h>
 #include <sentinel/core/logger.h>
 

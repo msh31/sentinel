@@ -34,7 +34,7 @@ if(BUILD_EXAMPLES)
     set(EXAMPLES
             logger-example
             vm_detection_example
-#            persistence-example
+            persistence-example
     )
 
     foreach(EXAMPLE ${EXAMPLES})
