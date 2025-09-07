@@ -15,12 +15,12 @@ logger::~logger() {
 
 void logger::info(const std::string& message)
 {
-	log("INFO", message);
+	log("INF", message);
 }
 
 void logger::warning(const std::string& message)
 {
-	log("WARN", message);
+	log("WRN", message);
 }
 
 void logger::error(const std::string& message)
@@ -46,8 +46,8 @@ void logger::fatal(const std::string& message)
 std::string logger::getColorForLevel(const std::string& level)
 {
 	static const std::unordered_map<std::string, std::string> levelColors = {
-		{"INFO", SENTINEL_INFO},
-		{"WARN", SENTINEL_WARNING},
+		{"INF", SENTINEL_INFO},
+		{"WRN", SENTINEL_WARNING},
 		{"ERR", SENTINEL_ERROR},
 		{"DBG", SENTINEL_SUCCESS},
 		{"SUC", SENTINEL_SUCCESS},
