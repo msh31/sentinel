@@ -5,6 +5,8 @@
 #ifndef ANTI_DEBUG_H
 #define ANTI_DEBUG_H
 
+#include <sentinel/common.h>
+
 class anti_debug
 {
     public:
