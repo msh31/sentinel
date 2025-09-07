@@ -48,6 +48,19 @@ int main()
 		log.error("Installation failed: " + result.details);
 	}
 
+	log.info("Verifying persistence..");
+	PersistenceResult verificationResult = persistence.install();
+
+	if (verificationResult.onlyRegistry()) {
+		log.success("Registry persistence OK");
+	} else if (verificationResult.onlyService()) {
+		log.success("Service persistence OK");
+	} else if (verificationResult.bothSucceeded()) {
+		log.success("Persistence verified!: " + verificationResult.details);
+	} else {
+		log.error("Verification failed: " + verificationResult.details);
+	}
+
 	log.info("Removing persistence..");
 	PersistenceResult removalResult = persistence.uninstall();
 
