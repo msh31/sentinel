@@ -31,6 +31,10 @@ target_include_directories(sentinel PUBLIC
 target_link_libraries(sentinel PRIVATE advapi32 psapi kernel32 user32)
 
 # build conditions
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    set_target_properties(sentinel PROPERTIES SUFFIX ".lib")
+endif()
+
 if(BUILD_EXAMPLES)
     message(STATUS "Building examples")
 
