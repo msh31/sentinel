@@ -37,39 +37,22 @@ void vm_detection::generateReport() {
 std::string vm_detection::checkForVMSignatures(const std::string& value, const std::string& source) {
     const VMSignatures sigs;
 
-    for (const auto& keyword : sigs.vmware) {
-        if (value.find(keyword) != std::string::npos) {
-            detectedSignatures.emplace_back(source + ": " + value);
-            hypervisor = "VMware";
-            confidence = "HIGH";
-            return "VMware";
-        }
-    }
+    const std::vector<std::pair<std::string, std::vector<std::string>>> signatureGroups = {
+        {"VMware", sigs.vmware},
+        {"VirtualBox", sigs.virtualbox},
+        {"Hyper-V", sigs.hyperv},
+        {"Qemu", sigs.qemu}
+    };
 
-    for (const auto& keyword : sigs.virtualbox) {
-        if (value.find(keyword) != std::string::npos) {
-            detectedSignatures.emplace_back(source + ": " + value);
-            hypervisor = "VirtualBox";
-            confidence = "HIGH";
-            return "VirtualBox";
-        }
-    }
-
-    for (const auto& keyword : sigs.hyperv) {
-        if (value.find(keyword) != std::string::npos) {
-            detectedSignatures.emplace_back(source + ": " + value);
-            hypervisor = "Hyper-V";
-            confidence = "HIGH";
-            return "Hyper-V";
-        }
-    }
-
-    for (const auto& keyword : sigs.qemu) {
-        if (value.find(keyword) != std::string::npos) {
-            detectedSignatures.emplace_back(source + ": " + value);
-            hypervisor = "Qemu";
-            confidence = "HIGH";
-            return "Qemu";
+                        //streuctured bindings
+    for (const auto& [name, keywords] : signatureGroups) {
+        for (const auto& keyword : keywords) {
+            if (value.find(keyword) != std::string::npos) {
+                detectedSignatures.emplace_back(source + ": " + value);
+                hypervisor = name;
+                confidence = "HIGH";
+                return name;
+            }
         }
     }
 
