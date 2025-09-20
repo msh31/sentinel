@@ -22,6 +22,8 @@ add_library(sentinel STATIC
         src/core/utils/service_helper.cpp
 )
 
+set_target_properties(sentinel PROPERTIES PREFIX "")
+
 # headers
 target_include_directories(sentinel PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
