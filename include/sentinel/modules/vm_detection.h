@@ -30,6 +30,7 @@ class vm_detection
 			std::vector<std::string> qemu = {"QEMU", "Bochs"};
 		};
 
+		VMSignatures sigs;
 		registry_helper registryHelper;
 		logger log;
 };
