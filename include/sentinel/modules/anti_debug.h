@@ -10,7 +10,8 @@
 class anti_debug
 {
     public:
-
+	bool isDebuggerProcessRunning(std::vector<std::string> processList); 
+		
     private:
         struct DebuggerSignatures {
             std::vector<std::string> x64dbg = {"x64dbg.exe", "x32dbg.exe", "x64dbg.dll", "x32dbg.dll"};
