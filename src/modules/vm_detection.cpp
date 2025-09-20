@@ -35,7 +35,6 @@ void vm_detection::generateReport() {
 }
 
 std::string vm_detection::checkForVMSignatures(const std::string& value, const std::string& source) {
-    const VMSignatures sigs;
 
     const std::vector<std::pair<std::string, std::vector<std::string>>> signatureGroups = {
         {"VMware", sigs.vmware},
