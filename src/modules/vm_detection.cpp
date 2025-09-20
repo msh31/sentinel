@@ -21,16 +21,19 @@ void vm_detection::generateReport() {
     std::string hypervisor = vm_detection::hypervisor;
 
     log.info("Confidence: " + confidence);
-    log.info("\nDetected Signatures: \n");
+    log.info("Detected Signatures: ");
 
-    for(const auto &sigs : detectedSignatures) {
-        if(sigs.empty()) {
-            log.info("No signatures found!");
-        } else {
-            log.warning("Found signatures:\n" + sigs);
+    if (detectedSignatures.empty()) {
+        log.info("No signatures detected");
+    } else {
+        log.warning("Found signatures:\n");
+
+        for(const auto &sigs : detectedSignatures) {
+            log.info("\t" + sigs);
         }
     }
 
+    std::cout << "\n";
     log.info("Detected HyperVisor: " + vm_detection::hypervisor);
 }
 
