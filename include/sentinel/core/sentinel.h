@@ -10,9 +10,11 @@
 #include <sentinel/common.h>
 #include <sentinel/core/config.h> //not required right now
 
-// frequently used utilities
+// core utilities
 #include <sentinel/core/utils/system_helper.h>
 #include <sentinel/core/utils/registry_helper.h>
+#include <sentinel/core/utils/service_helper.h>
+#include <sentinel/core/utils/process_helper.h>
 
 // TODO: determine popular modules
 
