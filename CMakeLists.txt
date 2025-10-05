@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # build / module options
 option(BUILD_EXAMPLES "Build examples" OFF)
+option(BUILD_TESTS "Build test programs" OFF)
 
 option(BUILD_VM_DETECTION "Build VM detection module" ON)
 option(BUILD_ANTI_DEBUG "Build anti-debug module" ON)
@@ -50,6 +51,20 @@ if(BUILD_EXAMPLES)
         message(STATUS "  Building example: ${EXAMPLE}")
     endforeach()
 endif()
+
+if(BUILD_TESTS)
+    message(STATUS "Building test programs")
+
+    set(TEST_PROGRAMS
+        win_services.cpp
+    )
+
+    foreach(TEST_PROGRAM ${TEST_PROGRAMS})
+        add_executable(${TEST_PROGRAM} tests/${TEST_PROGRAM}.cpp)
+        target_link_libraries(${TEST_PROGRAM} sentinel)
+        message(STATUS "  Building test program: ${TEST_PROGRAM}")
+    endforeach()
+endif ()
 
 if(BUILD_VM_DETECTION)
     target_sources(sentinel PRIVATE src/modules/vm_detection.cpp)
