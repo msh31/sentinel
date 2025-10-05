@@ -19,7 +19,6 @@ int main()
 	if (isVM){
 		log.warning("VM environment detected!");
 		vmDetect.generateReport();
-
 		return 0;
 	}
 

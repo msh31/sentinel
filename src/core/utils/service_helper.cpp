@@ -4,8 +4,7 @@
 
 #include <sentinel/core/utils/service_helper.h>
 
-bool service_helper::createService(const std::string& serviceName, const std::string& displayName, const std::string& executablePath)
-{
+bool service_helper::createService(const std::string& serviceName, const std::string& displayName, const std::string& executablePath) {
 	SC_HANDLE scManager = OpenSCManagerA(nullptr, nullptr, SC_MANAGER_CREATE_SERVICE);
 
 	if (!scManager) {
@@ -35,8 +34,7 @@ bool service_helper::createService(const std::string& serviceName, const std::st
 	return true;
 }
 
-bool service_helper::startService(const std::string& serviceName)
-{
+bool service_helper::startService(const std::string& serviceName) {
 	SC_HANDLE scManager = OpenSCManagerA(nullptr, nullptr, SC_MANAGER_CONNECT);
 
 	if (!scManager) {
@@ -44,24 +42,36 @@ bool service_helper::startService(const std::string& serviceName)
 		return false;
 	}
 
-	SC_HANDLE service = OpenServiceA(scManager, serviceName.c_str(), SERVICE_START);
+	SC_HANDLE service = OpenServiceA(scManager, serviceName.c_str(), SERVICE_START | SERVICE_QUERY_STATUS);
 
 	if (!service) {
-		if (GetLastError() == 1053) {
+		DWORD err = GetLastError();
+		if (err == 1053) {
 			log.error("Invalid service executable provided!");
+		} else if (err == 1056) {
+			log.error("An instance of this service is already running.");
+		} else if (err == 1060) {
+			log.error("The specified service does not exist as an installed service.");
+		} else {
+			log.error("error code: " + std::to_string(err));
 		}
-		else {
-			log.error("error code: " + std::to_string(GetLastError()));
-		}
-
 		CloseServiceHandle(scManager);
 		return false;
+	}
+
+	SERVICE_STATUS status;
+	if (QueryServiceStatus(service, &status) && status.dwCurrentState == SERVICE_RUNNING) {
+		log.info("Service already running.");
+		CloseServiceHandle(service);
+		CloseServiceHandle(scManager);
+		return true;  // sure....
 	}
 
 	bool success = StartServiceA(service, 0, nullptr);
 
 	if (!success) {
-		log.error("Failed to start service. Error: " + std::to_string(GetLastError()));
+		DWORD err = GetLastError();
+		log.error("Failed to start service. Error: " + std::to_string(err));
 	}
 
 	CloseServiceHandle(service);
@@ -69,8 +79,7 @@ bool service_helper::startService(const std::string& serviceName)
 	return success;
 }
 
-bool service_helper::stopService(const std::string& serviceName)
-{
+bool service_helper::stopService(const std::string& serviceName) {
 	SC_HANDLE scManager = OpenSCManagerA(nullptr, nullptr, SC_MANAGER_CONNECT);
 	SERVICE_STATUS serviceStatus;
 
@@ -98,8 +107,7 @@ bool service_helper::stopService(const std::string& serviceName)
 	return success;
 }
 
-bool service_helper::deleteService(const std::string& serviceName)
-{
+bool service_helper::deleteService(const std::string& serviceName) {
 	SC_HANDLE scManager = OpenSCManagerA(nullptr, nullptr, SC_MANAGER_CONNECT);
 	SERVICE_STATUS serviceStatus;
 
@@ -127,8 +135,7 @@ bool service_helper::deleteService(const std::string& serviceName)
 	return success;
 }
 
-bool service_helper::validateService(const std::string& serviceName)
-{
+bool service_helper::validateService(const std::string& serviceName) {
 	SC_HANDLE scManager = OpenSCManagerA(nullptr, nullptr, SC_MANAGER_CONNECT);
 
 	if (!scManager) {
