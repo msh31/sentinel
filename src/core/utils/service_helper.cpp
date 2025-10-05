@@ -80,31 +80,59 @@ bool service_helper::startService(const std::string& serviceName) {
 }
 
 bool service_helper::stopService(const std::string& serviceName) {
-	SC_HANDLE scManager = OpenSCManagerA(nullptr, nullptr, SC_MANAGER_CONNECT);
-	SERVICE_STATUS serviceStatus;
+    SC_HANDLE scManager = OpenSCManagerA(nullptr, nullptr, SC_MANAGER_CONNECT);
+    if (!scManager) {
+        log.error("Failed to open Service Control Manager. Error: " + std::to_string(GetLastError()));
+        return false;
+    }
 
-	if (!scManager) {
-		log.error("Failed to open Service Control Manager. Error: " + std::to_string(GetLastError()));
-		return false;
-	}
+    SC_HANDLE service = OpenServiceA(scManager, serviceName.c_str(), SERVICE_STOP | SERVICE_QUERY_STATUS);
+    if (!service) {
+        log.error("Failed to open service. Error: " + std::to_string(GetLastError()));
+        CloseServiceHandle(scManager);
+        return false;
+    }
 
-	SC_HANDLE service = OpenServiceA(scManager, serviceName.c_str(), SERVICE_STOP);
+    SERVICE_STATUS status;
+    if (!QueryServiceStatus(service, &status)) {
+        log.error("Failed to query service status. Error: " + std::to_string(GetLastError()));
+        CloseServiceHandle(service);
+        CloseServiceHandle(scManager);
+        return false;
+    }
 
-	if (!service) {
-		log.error("error code: " + std::to_string(GetLastError()));
-		CloseServiceHandle(scManager);
-		return false;
-	}
+    if (status.dwCurrentState == SERVICE_STOPPED) {
+        log.info("Service is already stopped.");
+        CloseServiceHandle(service);
+        CloseServiceHandle(scManager);
+        return true;
+    }
 
-	bool success = ControlService(service, SERVICE_CONTROL_STOP, &serviceStatus);
+    if (!ControlService(service, SERVICE_CONTROL_STOP, &status)) {
+        log.error("Failed to send stop command. Error: " + std::to_string(GetLastError()));
+        CloseServiceHandle(service);
+        CloseServiceHandle(scManager);
+        return false;
+    }
 
-	if (!success) {
-		log.warning("Failed to stop service. Error: " + std::to_string(GetLastError()));
-	}
+    for (int i = 0; i < 10; ++i) {
+        if (!QueryServiceStatus(service, &status)) {
+            log.error("Failed to query service status during wait. Error: " + std::to_string(GetLastError()));
+            break;
+        }
+        if (status.dwCurrentState == SERVICE_STOPPED) {
+            log.info("Service stopped successfully.");
+            CloseServiceHandle(service);
+            CloseServiceHandle(scManager);
+            return true;
+        }
+        Sleep(500); //bad...
+    }
 
-	CloseServiceHandle(service);
-	CloseServiceHandle(scManager);
-	return success;
+    log.warning("Timeout waiting for service to stop.");
+    CloseServiceHandle(service);
+    CloseServiceHandle(scManager);
+    return false;
 }
 
 bool service_helper::deleteService(const std::string& serviceName) {
