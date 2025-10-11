@@ -11,10 +11,12 @@
 #include <sentinel/core/config.h> //not required right now
 
 // core utilities
+#ifdef _WIN32 // TODO: improve this situation
 #include <sentinel/core/utils/system_helper.h>
 #include <sentinel/core/utils/registry_helper.h>
 #include <sentinel/core/utils/service_helper.h>
 #include <sentinel/core/utils/process_helper.h>
+#endif
 
 // TODO: determine popular modules
 
