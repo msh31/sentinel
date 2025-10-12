@@ -4,7 +4,7 @@ project(sentinel VERSION 1.0.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# build / module options
+# build (module) options
 option(BUILD_EXAMPLES "Build examples" OFF)
 option(BUILD_TESTS "Build test programs" OFF)
 
@@ -14,35 +14,42 @@ option(BUILD_PROCESS_ANALYSIS "Build process analysis module" ON)
 option(BUILD_PERSISTENCE "Build persistence module" ON)
 option(BUILD_NETWORK_BEACON "Build network beacon module" ON)
 
-# build the framework
-add_library(sentinel STATIC
-        src/core/logger.cpp
+# core source files (logger is cross-platform, others are mostly Windows-specific)
+set(SENTINEL_SRC
+    src/core/logger.cpp
+)
+
+if(WIN32)
+    list(APPEND SENTINEL_SRC
         src/core/utils/registry_helper.cpp
         src/core/utils/system_helper.cpp
         src/core/utils/process_helper.cpp
         src/core/utils/service_helper.cpp
-)
+    )
+endif()
+
+# build the framework
+add_library(sentinel STATIC ${SENTINEL_SRC})
 
 # headers
 target_include_directories(sentinel PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 # linking to windows libraries for cross compiliation reasons
-target_link_libraries(sentinel PRIVATE advapi32 psapi kernel32 user32)
-
-# build conditions
-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+if(WIN32)
+    target_link_libraries(sentinel PRIVATE advapi32 psapi kernel32 user32)
     set_target_properties(sentinel PROPERTIES SUFFIX ".lib")
 endif()
 
-if(BUILD_EXAMPLES)
+# build conditions
+if(BUILD_EXAMPLES AND WIN32)
     message(STATUS "Building examples")
 
     set(EXAMPLES
-            logger-example
-            vm_detection_example
-            persistence-example
+        logger-example
+        vm_detection_example
+        persistence-example
     )
 
     foreach(EXAMPLE ${EXAMPLES})
@@ -52,7 +59,7 @@ if(BUILD_EXAMPLES)
     endforeach()
 endif()
 
-if(BUILD_TESTS)
+if(BUILD_TESTS AND WIN32)
     message(STATUS "Building test programs")
 
     set(TEST_PROGRAMS
@@ -66,27 +73,32 @@ if(BUILD_TESTS)
     endforeach()
 endif ()
 
-if(BUILD_VM_DETECTION)
-    target_sources(sentinel PRIVATE src/modules/vm_detection.cpp)
-    target_compile_definitions(sentinel PRIVATE SENTINEL_HAS_VM_DETECTION)
-endif()
+# modules (Windows-only)
+if(WIN32)
 
-#if(BUILD_ANTI_DEBUG)
-#    target_sources(sentinel PRIVATE src/modules/anti_debug.cpp)
-#    target_compile_definitions(sentinel PRIVATE SENTINEL_HAS_ANTI_DEBUG)
-#endif()
-#
-#if(BUILD_PROCESS_ANALYSIS)
-#    target_sources(sentinel PRIVATE src/modules/process_analysis.cpp)
-#    target_compile_definitions(sentinel PRIVATE SENTINEL_HAS_PROCESS_ANALYSIS)
-#endif()
-#
-if(BUILD_PERSISTENCE)
-    target_sources(sentinel PRIVATE src/modules/persistence.cpp)
-    target_compile_definitions(sentinel PRIVATE SENTINEL_HAS_PERSISTENCE)
+    if(BUILD_VM_DETECTION)
+        target_sources(sentinel PRIVATE src/modules/vm_detection.cpp)
+        target_compile_definitions(sentinel PRIVATE SENTINEL_HAS_VM_DETECTION)
+    endif()
+
+    # if(BUILD_ANTI_DEBUG)
+    #     target_sources(sentinel PRIVATE src/modules/anti_debug.cpp)
+    #     target_compile_definitions(sentinel PRIVATE SENTINEL_HAS_ANTI_DEBUG)
+    # endif()
+    #
+    # if(BUILD_PROCESS_ANALYSIS)
+    #     target_sources(sentinel PRIVATE src/modules/process_analysis.cpp)
+    #     target_compile_definitions(sentinel PRIVATE SENTINEL_HAS_PROCESS_ANALYSIS)
+    # endif()
+
+    if(BUILD_PERSISTENCE)
+        target_sources(sentinel PRIVATE src/modules/persistence.cpp)
+        target_compile_definitions(sentinel PRIVATE SENTINEL_HAS_PERSISTENCE)
+    endif()
+
+    # if(BUILD_NETWORK_BEACON)
+    #     target_sources(sentinel PRIVATE src/modules/network_beacon.cpp)
+    #     target_compile_definitions(sentinel PRIVATE SENTINEL_HAS_NETWORK_BEACON)
+    # endif()
+
 endif()
-#
-#if(BUILD_NETWORK_BEACON)
-#    target_sources(sentinel PRIVATE src/modules/network_beacon.cpp)
-#    target_compile_definitions(sentinel PRIVATE SENTINEL_HAS_NETWORK_BEACON)
-#endif()
